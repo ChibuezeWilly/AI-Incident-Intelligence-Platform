@@ -272,6 +272,8 @@ vectorizer = TfidfVectorizer(
 )
 ```
 
+# Engineering Tradeoffs & Design Decisions
+
 ### Why TF-IDF?
 
 #### Advantages
