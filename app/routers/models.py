@@ -4,8 +4,9 @@ from ..load_model import model, vectorizer, label_encoder
 from ..database import get_db
 from sqlalchemy.orm import Session
 from app import models
-from ..oauth2 import get_current_admin, get_current_user
+from ..oauth2 import get_current_admin
 from sqlalchemy import func
+from app import models
 
 router = APIRouter(
     prefix='/model',
@@ -27,10 +28,10 @@ def get_health():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Model files not found")
     
 @router.get("/metrics")
-def get_metrics(db: Session = Depends(get_db), current_user: Session = Depends(get_current_user)):
+def get_metrics(db: Session = Depends(get_db), current_user: models.Admin = Depends(get_current_admin)):
     
-    # if current_user.role != "Admin":
-    #     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized to perform action")
+    if current_user.role != "Admin":
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized to perform action")
     
     metrics = db.query(
         func.count(models.Tickets.id),

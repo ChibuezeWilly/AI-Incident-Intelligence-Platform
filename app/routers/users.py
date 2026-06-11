@@ -12,7 +12,7 @@ router = APIRouter(
 )
 
 @router.get("", response_model=list[AllUsers])
-async def get_users(db: Session = Depends(get_db), current_user: Session = Depends(oauth2.get_current_admin)):
+async def get_users(db: Session = Depends(get_db), current_user: models.User = Depends(oauth2.get_current_admin)):
     # check if user is an admin before running
     
     if current_user is None:
@@ -29,7 +29,7 @@ async def get_users(db: Session = Depends(get_db), current_user: Session = Depen
     
 # for users to see their account details
 @router.get("/profile", response_model=UserDetails)
-async def get_user(current_user: Session = Depends(oauth2.get_current_user)):
+async def get_user(current_user: models.User = Depends(oauth2.get_current_user)):
     # search user
     if current_user is None:
        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
@@ -38,18 +38,24 @@ async def get_user(current_user: Session = Depends(oauth2.get_current_user)):
         "user": current_user,
         "tickets": current_user.incidents
     }
-    
-    
+
 @router.get("/{id}", response_model=UserDetails)
-async def get_one_user(id: int, current_admin: Session = Depends(oauth2.get_current_admin), db: Session = Depends(get_db)):
-    # search user
+async def get_one_user(
+    id: int, 
+    db: Session = Depends(get_db),
+    current_admin: models.Admin = Depends(oauth2.get_current_admin)
+):
     user = db.query(models.User).filter(models.User.id == id).first()
-        
+
+    if not current_admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to view this profile"
+        )
     if user is None:
-       raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-   
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
     return {
         "user": user,
         "tickets": user.incidents if user.incidents is not None else []
     }
-    

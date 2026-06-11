@@ -14,7 +14,7 @@ router = APIRouter(
 # return respons model
 
 @router.post("/signup", status_code=status.HTTP_201_CREATED, response_model=AdminResponse) 
-async def create_user(user: AdminCreate, db: Session =Depends(get_db)):
+async def create_user(user: AdminCreate, db: Session = Depends(get_db)):
     # check if email already exist
     email_exist = db.query(models.Admin).filter(models.Admin.email == user.email).first()
     if email_exist:

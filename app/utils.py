@@ -150,7 +150,7 @@ DEPARTMENT_TAGS = {
         "dependency_conflict": ["pip install failed", "version mismatch", "pydantic validation error"],
         "environment_variable": ["missing env", "secret key null", "config error"],
         "file_permissions": ["permission denied", "chmod error", "cannot write file", "read only"],
-        "background_worker": ["celery queue full", "redis connection lost", "task stuck"]
+        "background_worker": ["celery queue full", "redis connection lost", "task stuck", "network issue"]
     }
 }
 
@@ -211,7 +211,7 @@ def generate_priority(generated_tags: list, account_tier: str) -> PriorityLevel:
         return PriorityLevel.HIGH if highest_score == 2 else PriorityLevel.MEDIUM
         
     # Free Customers (Tier 3)
-    elif account_tier == "Free":  
+    elif account_tier == "Free" or "Solo":  
         if highest_score == 3: 
             return PriorityLevel.HIGH
         return PriorityLevel.MEDIUM if highest_score == 2 else PriorityLevel.LOW

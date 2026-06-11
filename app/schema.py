@@ -22,6 +22,26 @@ class AccountCreated(AccountBase):
 class AllUsers(AccountCreated):
     role: str
  
+
+# ticket creation
+class CreateTicketRequest(BaseModel):
+    subject: str
+    body: str
+    type: str
+    
+class TicketResponse(BaseModel):
+    id: int
+    user_id: int
+    subject: str
+    body: str
+    department: str
+    confidence: float
+    priority: str
+    tags: list[str]
+    extracted_keywords: list[str]
+    status: str
+    latency: float 
+
 # user
 class UserDetails(BaseModel):
     user: AccountCreated
@@ -63,25 +83,6 @@ class AdminLoginResponse(BaseModel):
     
 class TokenData(BaseModel):
     id: int | None = None
-
-# ticket creation
-class CreateTicketRequest(BaseModel):
-    subject: str
-    body: str
-    type: str
-    
-class TicketResponse(BaseModel):
-    id: int
-    user_id: int
-    subject: str
-    body: str
-    department: str
-    confidence: float
-    priority: str
-    tags: list[str]
-    extracted_keywords: list[str]
-    status: str
-    latency: float
 
 # the model
 class MetricsResponse(BaseModel):

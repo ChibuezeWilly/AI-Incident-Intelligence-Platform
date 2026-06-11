@@ -9,13 +9,14 @@ import pandas as pd
 import torch
 from ..utils import generated_tags, generate_priority
 import time
+from app import models
 
 router = APIRouter(prefix="/tickets", tags=["Tickets"])
 
 @router.post("", response_model=TicketResponse)
 async def create_ticket(
     new_ticket: CreateTicketRequest,
-    user: Session = Depends(get_current_user),
+    user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     # check if user exists
@@ -92,12 +93,12 @@ async def create_ticket(
         
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="An unexpected database error occurred while creating your account",
+            detail="An unexpected database error occurred while creating your ticket",
         )
         
 # for users to see all their tickets
-@router.get("", response_model=list[TicketResponse])
-async def get_user_tickets(current_user: Session = Depends(get_current_user)):
+@router.get("/all", response_model=list[TicketResponse])
+async def get_user_tickets(current_user: models.User = Depends(get_current_user)):
     # search ticket
     all_tickets = current_user.incidents
     
