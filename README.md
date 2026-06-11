@@ -260,6 +260,8 @@ flowchart LR
     K8S --> FUTURE[Future Production Architecture]
 ```
 
+# Engineering Tradeoffs & Design Decisions
+
 ## 1. TF-IDF vs Transformer Models
 
 The current version of the system uses a **TF-IDF vectorizer** for feature extraction.
@@ -271,8 +273,6 @@ vectorizer = TfidfVectorizer(
     stop_words="english"
 )
 ```
-
-# Engineering Tradeoffs & Design Decisions
 
 ### Why TF-IDF?
 
