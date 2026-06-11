@@ -6,9 +6,9 @@ from torch.nn.modules import BatchNorm1d
 import joblib
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-MODEL_PATH = BASE_DIR / "model" / "incident_tracking_system.pth"
-VECTORIZER_PATH = BASE_DIR / "model" / "TfidfVectorizer.joblib"
-LABEL_ENCODER_PATH = BASE_DIR / "model" / "label_encoder.joblib"
+MODEL_PATH = BASE_DIR / "Model" / "incident_tracking_system.pth"
+VECTORIZER_PATH = BASE_DIR / "Model" / "TfidfVectorizer.joblib"
+LABEL_ENCODER_PATH = BASE_DIR / "Model" / "label_encoder.joblib"
 
 
 class IncidentTrackingSystem(nn.Module):
